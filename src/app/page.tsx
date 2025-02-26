@@ -1,170 +1,148 @@
 "use client";
-
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { Send, Loader2 } from "lucide-react";
 
 interface HistoryInterface {
   role: "user" | "model";
   parts: { text: string }[];
 }
 
-// export default function Home() {
-//   const [text, setText] = useState("");
-//   const [messages, setMessages] = useState<HistoryInterface[]>([]);
-//   const [error, setError] = useState("");
-
-//   async function sendMessageToGemini() {
-//     try {
-//       const userMessage: HistoryInterface = {
-//         role: "user",
-//         parts: [{ text: text }],
-//       };
-
-//       setMessages((prev) => [...prev, userMessage]);
-
-//       const response = await axios.post("/api/chat", {
-//         history: messages,
-//         chat: text,
-//       });
-
-//       const modelMessage: HistoryInterface = {
-//         role: "model",
-//         parts: [{ text: response.data.text }],
-//       };
-
-//       setText("");
-//       setError("");
-//       setMessages((prev) => [...prev, modelMessage]);
-//     } catch (error) {
-//       setError("Failed to send message.");
-//     }
-//   }
-
-//   return (
-//     <div className="p-4 border-2">
-//       <h1 className="text-2xl font-bold mb-4 text-center">Sora</h1>
-
-//       {/* Display Messages */}
-//       <div className="mb-4">
-//         {messages.map((message, index) => (
-//           <div
-//             key={index}
-//             className={`mb-2 p-2 rounded-lg w-full ${
-//               message.role === "user" ? "bg-blue-500 text-white text-left" : "bg-gray-200 text-right text-black"
-//             }`}
-//           >
-//             <strong>{message.role === "user" ? "You" : "AI"}:</strong>{" "}
-//             {message.parts[0].text}
-//           </div>
-//         ))}
-//     </div>
-
-//       {/* Display Error */}
-//       {error && <div className="text-red-500 mb-4">{error}</div>}
-
-//       {/* Input and Send Button */}
-//       <div className="flex gap-2">
-//         <input
-//           type="text"
-//           className="flex-1 p-2 border rounded-lg bg-gray-800 text-white"
-//           placeholder="Type a message..."
-//           value={text}
-//           onChange={(e) => setText(e.target.value)}
-//           onKeyPress={(e) => e.key === "Enter" && sendMessageToGemini()} // Send on Enter key
-//         />
-//         <button
-//           onClick={sendMessageToGemini}
-//           className="p-2 bg-blue-500 text-white rounded-lg"
-//         >
-//           Send
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
-
-function Home() {
+export default function Home() {
   const [message, setMessage] = useState("");
   const [history, setHistory] = useState<HistoryInterface[]>([]);
-  const [error, setErrror] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [history]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   async function sendMessageToGemini() {
     try {
+      if (!message.trim()) return;
+      
       const userMessage: HistoryInterface = {
         role: "user",
         parts: [{ text: message }],
       };
-
+      
       setHistory((prev) => [...prev, userMessage]);
-
+      setIsLoading(true);
+      setMessage("");
+      
       const response = await axios.post("/api/chat", {
         history: history,
         chat: message,
       });
-
+      
       const soraResponse: HistoryInterface = {
         role: "model",
         parts: [{ text: response.data.text }],
       };
-
+      
       setHistory((prev) => [...prev, soraResponse]);
-
-      setErrror("");
-      setMessage("");
+      setError("");
     } catch (error) {
-      setErrror("Failed to send message");
-      console.log(error);
+      setError("Failed to send message. Please try again.");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
-  return (
-    <div className="flex flex-col p-3 border-2 border-cyan-500 h-screen w-screen">
-      <h1 className="mb-5 border-2 text-center text-4xl font-extrabold">
-        Sora
-      </h1>
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessageToGemini();
+    }
+  };
 
-      {error.length > 0 && (
-        <h2 className="text-center text-red-500">*{error}</h2>
+  return (
+    <div className="flex flex-col h-screen bg-gray-950 text-gray-100">
+      {/* Header */}
+      <header className="bg-gray-900 border-b border-gray-800 py-4 px-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+          Sora AI Chat
+        </h1>
+      </header>
+
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-900/50 border border-red-700 text-red-200 px-4 py-2 mx-6 mt-4 rounded-md text-sm">
+          {error}
+        </div>
       )}
 
-      {/* Chat message for ai and user */}
-      <div className="border-2 mb-3 rounded-xl border-red-500 grow h-full p-4 space-y-2">
-       
-        {history.map((message, index) => (
-          <div
-            key={index}
-            className={`w-fit px-5 py-2 rounded-xl
-              ${
-                message.role == "user"
-                  ? "bg-blue-500 text-white ml-auto"
-                  : "bg-gray-200 text-black"
-              }`}
-          >
-            {message.parts[0].text}
+      {/* Chat Window */}
+      <div className="flex-1 sm:mx-10 overflow-y-auto p-4 md:p-6 space-y-4 scrollbar-thin scrollbar-thumb-gray-700">
+        {history.length === 0 ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center text-gray-500">
+              <p className="text-lg mb-2">Start a conversation with Sora</p>
+              <p className="text-sm">Type a message below to begin</p>
+            </div>
           </div>
-        ))}
+        ) : (
+          history.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+            >
+              <div
+                className={`max-w-[85%] px-4 py-3 rounded-2xl ${
+                  msg.role === "user"
+                    ? "bg-blue-600 text-white rounded-tr-none"
+                    : "bg-gray-800 text-gray-100 rounded-tl-none border border-gray-700"
+                }`}
+              >
+                <p className="whitespace-pre-wrap">{msg.parts[0].text}</p>
+              </div>
+            </div>
+          ))
+        )}
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="bg-gray-800 text-gray-300 rounded-2xl rounded-tl-none border border-gray-700 px-4 py-3">
+              <Loader2 className="h-5 w-5 animate-spin" />
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
       </div>
 
-      {/* Input message with a send button */}
-      <div className="flex items-center border-2 border-red-500 rounded-full h-16 overflow-hidden">
-        <input
-          type="text"
-          className="flex-grow px-4 py-2 bg-gray-400 h-full text-lg border-none outline-none rounded-l-full mr-5"
-          placeholder="Send Message..."
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && sendMessageToGemini()} // Send on Enter key
-        />
-        <button
-          className="bg-blue-500 hover:bg-blue-700
-         text-white font-semibold px-6 py-2 h-full rounded-r-full 
-         transition duration-300"
-          onClick={sendMessageToGemini}
-        >
-          Send
-        </button>
+      {/* Input Section */}
+      <div className="border-t border-gray-800 bg-gray-900 p-4">
+        <div className="max-w-4xl mx-auto flex items-center gap-2">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              className="w-full bg-gray-800 text-white rounded-full px-4 py-3 pr-12 border border-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-gray-500"
+              placeholder="Type your message..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={isLoading}
+            />
+          </div>
+          <button
+            className="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 text-white p-3 rounded-full disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center"
+            onClick={sendMessageToGemini}
+            disabled={isLoading || !message.trim()}
+          >
+            {isLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Send className="h-5 w-5" />
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
 }
-
-export default Home;
