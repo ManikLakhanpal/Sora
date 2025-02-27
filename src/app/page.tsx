@@ -2,6 +2,8 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { Send, Loader2 } from "lucide-react";
+import NavigationBar from "@/components/NavigationBar";
+import { useTheme } from "next-themes";
 
 interface HistoryInterface {
   role: "user" | "model";
@@ -64,13 +66,9 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-950 text-gray-100">
+    <div className="flex flex-col h-screen">
       {/* Header */}
-      <header className="bg-gray-900 border-b border-gray-800 py-4 px-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-          Sora AI Chat
-        </h1>
-      </header>
+      <NavigationBar />
 
       {/* Error Message */}
       {error && (
@@ -146,3 +144,20 @@ export default function Home() {
     </div>
   );
 }
+// "use client"
+// import { useTheme } from 'next-themes'
+
+// export default function Home() {
+//   const { theme, setTheme } = useTheme()
+
+//   return (
+//     <div className='flex justify-center h-screen w-screen align-middle'>
+//       The current theme is: {theme}
+//       <div className='flex flex-col justify-around'>
+//         <button onClick={() => setTheme('light')}>Light Mode</button>
+//         <button onClick={() => setTheme('dark')}>Dark Mode</button>
+//         <button onClick={() => setTheme('system')}>System Mode</button>
+//       </div>
+//     </div>
+//   )
+// }
