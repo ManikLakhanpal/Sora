@@ -115,12 +115,12 @@ export default function Home() {
       </div>
 
       {/* Input Section */}
-      <div className="border-t border-gray-800 bg-gray-900 p-4">
+      <div className="border-t border-gray-800 p-4">
         <div className="max-w-4xl mx-auto flex items-center gap-2">
           <div className="relative flex-1">
             <input
               type="text"
-              className="w-full bg-gray-800 text-white rounded-full px-4 py-3 pr-12 border border-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-gray-500"
+              className="w-full  text-white rounded-full px-4 py-3 pr-12 border border-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-gray-500"
               placeholder="Type your message..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
@@ -144,20 +144,3 @@ export default function Home() {
     </div>
   );
 }
-// "use client"
-// import { useTheme } from 'next-themes'
-
-// export default function Home() {
-//   const { theme, setTheme } = useTheme()
-
-//   return (
-//     <div className='flex justify-center h-screen w-screen align-middle'>
-//       The current theme is: {theme}
-//       <div className='flex flex-col justify-around'>
-//         <button onClick={() => setTheme('light')}>Light Mode</button>
-//         <button onClick={() => setTheme('dark')}>Dark Mode</button>
-//         <button onClick={() => setTheme('system')}>System Mode</button>
-//       </div>
-//     </div>
-//   )
-// }
