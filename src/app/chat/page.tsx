@@ -79,7 +79,7 @@ export default function Home() {
       )}
 
       {/* Chat Window */}
-      <div className="flex-1 sm:mx-10 overflow-y-auto p-4 md:p-6 space-y-4 scrollbar-thin scrollbar-thumb-gray-700 mt-16">
+      <div className="flex-1 sm:mx-10 overflow-y-scroll p-4 md:p-6 space-y-4 scrollbar-none mt-16">
         {history.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center text-gray-500">
