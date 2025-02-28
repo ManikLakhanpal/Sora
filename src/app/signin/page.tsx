@@ -1,16 +1,16 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { signIn, signOut, useSession } from "next-auth/react"
-import GoogleButton from "react-google-button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+import { useState, useEffect } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import GoogleButton from "react-google-button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function AuthScreen() {
-  const { data: session, status } = useSession()
-  const [isLoading, setIsLoading] = useState(true)
+  const { data: session, status } = useSession();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (status !== "loading") {

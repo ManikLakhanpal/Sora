@@ -1,9 +1,8 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { useSession } from "next-auth/react"
 import { Send, Loader2 } from "lucide-react";
-import { Redirect } from "next";
+import { useRouter } from "next/navigation"; 
 
 interface HistoryInterface {
   role: "user" | "model";
@@ -16,12 +15,7 @@ export default function Home() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const { data: session, status } = useSession();
-
-  if (!session?.user) {
-    window.location.href = '/signin';
-  }
+  const router = useRouter();
 
   useEffect(() => {
     scrollToBottom();
@@ -56,9 +50,13 @@ export default function Home() {
       
       setHistory((prev) => [...prev, soraResponse]);
       setError("");
-    } catch (error) {
-      setError("Failed to send message. Please try again.");
-      console.error(error);
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        router.replace("/signin"); // Redirect user to signin page
+      } else {
+        setError("Failed to send message. Please try again.");
+        console.error(error);
+      }
     } finally {
       setIsLoading(false);
     }
