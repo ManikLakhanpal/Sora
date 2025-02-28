@@ -79,7 +79,7 @@ export default function Home() {
       )}
 
       {/* Chat Window */}
-      <div className="flex-1 sm:mx-10 overflow-y-auto p-4 md:p-6 space-y-4 scrollbar-thin scrollbar-thumb-gray-700">
+      <div className="flex-1 sm:mx-10 overflow-y-auto p-4 md:p-6 space-y-4 scrollbar-thin scrollbar-thumb-gray-700 mt-16">
         {history.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center text-gray-500">
@@ -121,7 +121,7 @@ export default function Home() {
           <div className="relative flex-1">
             <input
               type="text"
-              className="w-full  text-white rounded-full px-4 py-3 pr-12 border border-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-gray-500"
+              className="w-full dark:text-white rounded-full px-4 py-3 pr-12 border border-gray-700 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-gray-500"
               placeholder="Type your message..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
