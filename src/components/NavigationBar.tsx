@@ -1,7 +1,7 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { Sun, Moon, User } from "lucide-react"
+import { Sun, Moon, SunMoon, User } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useSession, signOut } from "next-auth/react"
 import Link from "next/link"
@@ -31,9 +31,9 @@ function NavigationBar() {
       <div className="flex items-center space-x-4">
         <button
           className="p-2 border dark:border-gray-700 border-gray-200 rounded"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          onClick={() => setTheme(theme === "dark" ? "light" : theme == "light" ? "system" : "dark")}
         >
-          {theme === "dark" ? <Sun /> : <Moon />}
+          {theme === "dark" ? <Sun /> : theme == "light" ? <Moon /> : <SunMoon />}
         </button>
         {session ? (
           <DropdownMenu>
