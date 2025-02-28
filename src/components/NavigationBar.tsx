@@ -22,11 +22,11 @@ function NavigationBar() {
   }
 
   return (
-    <header className="border-b flex justify-between items-center dark:border-gray-700 border-gray-200 py-4 px-6">
+    <header className="fixed top-0 left-0 w-full z-50 border-b flex justify-between items-center dark:border-gray-700 border-gray-200 py-4 px-6 bg-white dark:bg-black bg-opacity-80 dark:bg-opacity-80 backdrop-blur-md">
       <Link href="/">
-      <h1 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-        Sora AI Chat
-      </h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+          Sora AI Chat
+        </h1>
       </Link> 
       <div className="flex items-center space-x-4">
         <button
@@ -61,4 +61,3 @@ function NavigationBar() {
 }
 
 export default NavigationBar
-
