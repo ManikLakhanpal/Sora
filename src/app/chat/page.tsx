@@ -1,8 +1,9 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { useSession } from "next-auth/react"
 import { Send, Loader2 } from "lucide-react";
-import NavigationBar from "@/components/NavigationBar";
+import { Redirect } from "next";
 
 interface HistoryInterface {
   role: "user" | "model";
@@ -15,6 +16,12 @@ export default function Home() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const { data: session, status } = useSession();
+
+  if (!session?.user) {
+    window.location.href = '/signin';
+  }
 
   useEffect(() => {
     scrollToBottom();

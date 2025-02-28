@@ -1,10 +1,8 @@
 "use client";
 
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { motion } from "framer-motion";
 import { Circle } from "lucide-react";
-import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import LoginButton from "../loginButton";
 
 function ElegantShape({
   className,
@@ -191,12 +189,11 @@ function HeroGeometric({
             </p>
             <div>
               <button 
-                className="border-2 py-2 px-6 mx-5 bg-zinc-800 rounded-lg text-white"
+                className="border-2 py-2 px-6 mx-5 bg-zinc-800 rounded-lg text-white hover:bg-zinc-900"
                 onClick={() => {window.location.href = "/chat"}}
                 >
-                Home
+                Chat Now
               </button>
-              <LoginButton />
             </div>
           </motion.div>
         </div>
