@@ -6,7 +6,7 @@ function NavigationBar() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="border-b flex justify-around dark:border-gray-700 border-gray-200 py-4 px-4">
+    <header className="border-b flex justify-around dark:border-gray-700 border-gray-200 py-4 px-4" suppressHydrationWarning>
       <h1 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
         Sora AI Chat
       </h1>

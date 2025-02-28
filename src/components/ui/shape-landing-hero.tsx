@@ -4,6 +4,7 @@ import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Circle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import LoginButton from "../loginButton";
 
 function ElegantShape({
   className,
@@ -195,12 +196,7 @@ function HeroGeometric({
                 >
                 Home
               </button>
-              <button 
-                className="border-2 py-2 px-6 rounded-lg text-white"
-                onClick={() => {window.location.href = "/signIn"}}
-                >
-                Sign In
-            </button>
+              <LoginButton />
             </div>
           </motion.div>
         </div>

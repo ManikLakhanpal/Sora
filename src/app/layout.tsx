@@ -1,36 +1,29 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+import Providers from "@/components/Providers";
+import { Inter } from "next/font/google";
+import NavigationBar from "@/components/NavigationBar";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Sora – AI Chatbot",
   description: "Sora is an advanced AI chatbot built by Manik Lakhanpal, powered by Google Gemini's API for intelligent and dynamic conversations.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider attribute={"class"} defaultTheme="system">
+    <html lang="en">
+      <body className={inter.className}>
+        <Providers >
+        <NavigationBar />
           {children}
-        </ThemeProvider>
+          </Providers>
       </body>
     </html>
   );
