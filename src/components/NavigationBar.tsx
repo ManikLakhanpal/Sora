@@ -45,7 +45,7 @@ function NavigationBar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>
-                <Link href="/profile">Profile</Link>
+                <Link href="/signin">Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
             </DropdownMenuContent>
