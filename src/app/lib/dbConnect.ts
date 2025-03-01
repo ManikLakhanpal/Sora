@@ -28,7 +28,7 @@ async function dbConnect(): Promise<void> {
     }
 
     try {
-        const db = await mongoose.connect(process.env.MONGODB_URI!);
+        const db = await mongoose.connect(`${process.env.MONGODB_URI!}/sora`);
         connection.isConnected = db.connections[0].readyState;
 
         console.log("DB connected successfully");
