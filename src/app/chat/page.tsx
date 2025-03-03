@@ -13,6 +13,52 @@ interface HistoryInterface {
   parts: { text: string }[];
 }
 
+/**
+ * The `Home` component represents the main chat interface for the application.
+ * It allows users to send messages and receive responses from the Gemini model.
+ * 
+ * @component
+ * 
+ * @returns {JSX.Element} The rendered chat interface.
+ * 
+ * @example
+ * <Home />
+ * 
+ * @remarks
+ * This component maintains the chat history, handles user input, and manages the loading state.
+ * It also handles errors and redirects the user to the signin page if unauthorized.
+ * 
+ * @function
+ * @name Home
+ * 
+ * @hook
+ * @name useState
+ * @description Manages the state for message, history, error, and isLoading.
+ * 
+ * @hook
+ * @name useRef
+ * @description Creates a reference to the end of the messages container for scrolling.
+ * 
+ * @hook
+ * @name useRouter
+ * @description Provides navigation capabilities.
+ * 
+ * @hook
+ * @name useEffect
+ * @description Scrolls to the bottom of the chat window whenever the history changes.
+ * 
+ * @function
+ * @name sendMessageToGemini
+ * @description Sends the user's message to the Gemini model and updates the chat history with the response.
+ * 
+ * @function
+ * @name handleKeyDown
+ * @description Handles the Enter key press to send the message.
+ * 
+ * @param {React.KeyboardEvent<HTMLInputElement>} e - The keyboard event.
+ * 
+ * @returns {void}
+ */
 export default function Home() {
   const [message, setMessage] = useState("");
   const [history, setHistory] = useState<HistoryInterface[]>([]);
@@ -107,7 +153,7 @@ export default function Home() {
               >
                 <ReactMarkdown
                   components={{
-                    code({ inline, className, children, ...props }) {
+                    code({ inline, className, children, ...props }: any) {
                       const match = /language-(\w+)/.exec(className || "");
                       return !inline && match ? (
                         <div className="relative">
