@@ -1,8 +1,12 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import { Send, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation"; 
+import { Send, Loader2, ClipboardCopy } from "lucide-react";
+import { useRouter } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 interface HistoryInterface {
   role: "user" | "model";
@@ -28,26 +32,26 @@ export default function Home() {
   async function sendMessageToGemini() {
     try {
       if (!message.trim()) return;
-      
+
       const userMessage: HistoryInterface = {
         role: "user",
         parts: [{ text: message }],
       };
-      
+
       setHistory((prev) => [...prev, userMessage]);
       setIsLoading(true);
       setMessage("");
-      
+
       const response = await axios.post("/api/chat", {
         history: history,
         chat: message,
       });
-      
+
       const soraResponse: HistoryInterface = {
         role: "model",
         parts: [{ text: response.data.text }],
       };
-      
+
       setHistory((prev) => [...prev, soraResponse]);
       setError("");
     } catch (error: any) {
@@ -71,7 +75,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Error Message */}
       {error && (
         <div className="bg-red-900/50 border border-red-700 text-red-200 px-4 py-2 mx-6 mt-4 rounded-md text-sm">
           {error}
@@ -91,7 +94,9 @@ export default function Home() {
           history.map((msg, index) => (
             <div
               key={index}
-              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+              className={`flex ${
+                msg.role === "user" ? "justify-end" : "justify-start"
+              }`}
             >
               <div
                 className={`max-w-[85%] px-4 py-3 rounded-2xl ${
@@ -100,7 +105,40 @@ export default function Home() {
                     : "bg-gray-800 text-gray-100 rounded-tl-none border border-gray-700"
                 }`}
               >
-                <p className="whitespace-pre-wrap">{msg.parts[0].text}</p>
+                <ReactMarkdown
+                  components={{
+                    code({ inline, className, children, ...props }) {
+                      const match = /language-(\w+)/.exec(className || "");
+                      return !inline && match ? (
+                        <div className="relative">
+                          <CopyToClipboard text={String(children).trim()}>
+                            <button className="absolute right-2 top-2 text-gray-400 hover:text-gray-200">
+                              <ClipboardCopy size={16} />
+                            </button>
+                          </CopyToClipboard>
+                          <SyntaxHighlighter
+                            {...props}
+                            style={dracula}
+                            language={match[1]}
+                            PreTag="div"
+                            className="rounded-lg border border-gray-700"
+                          >
+                            {String(children).trim()}
+                          </SyntaxHighlighter>
+                        </div>
+                      ) : (
+                        <code
+                          {...props}
+                          className="bg-gray-700 px-1 py-0.5 rounded"
+                        >
+                          {children}
+                        </code>
+                      );
+                    },
+                  }}
+                >
+                  {msg.parts[0].text}
+                </ReactMarkdown>
               </div>
             </div>
           ))
