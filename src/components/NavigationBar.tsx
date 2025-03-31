@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes"
 import { Sun, Moon, SunMoon, User } from "lucide-react"
 import { useEffect, useState } from "react"
-import { useSession, signOut } from "next-auth/react"
+import { useAuth } from "@/app/context/AuthContext"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -11,7 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 function NavigationBar() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
-  const { data: session } = useSession()
+  const { user, signIn, logOut } = useAuth()
 
   useEffect(() => {
     setMounted(true)
@@ -31,23 +31,23 @@ function NavigationBar() {
       <div className="flex items-center space-x-4">
         <button
           className="p-2 border dark:border-gray-700 border-gray-200 rounded"
-          onClick={() => setTheme(theme === "dark" ? "light" : theme == "light" ? "system" : "dark")}
+          onClick={() => setTheme(theme === "dark" ? "light" : theme === "light" ? "system" : "dark")}
         >
-          {theme === "dark" ? <Sun /> : theme == "light" ? <Moon /> : <SunMoon />}
+          {theme === "dark" ? <Sun /> : theme === "light" ? <Moon /> : <SunMoon />}
         </button>
-        {session ? (
+        {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
-                <AvatarImage src={session.user?.image || ""} />
-                <AvatarFallback>{session.user?.name?.[0] || "U"}</AvatarFallback>
+                <AvatarImage src={user.photoURL || ""} alt={user.displayName || "User"} />
+                <AvatarFallback>{user.displayName?.[0] || "U"}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>
-                <Link href="/signin">Profile</Link>
+                <Link href="/profile">Profile</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => signOut()}>Sign Out</DropdownMenuItem>
+              <DropdownMenuItem onClick={logOut}>Sign Out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
