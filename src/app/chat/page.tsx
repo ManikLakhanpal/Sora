@@ -54,7 +54,7 @@ export default function Home() {
 
       let token = await getFirebaseToken();
 
-      const response = await axios.post("http://localhost:5000/api/chat", {
+      const response = await axios.post(`http://localhost:5000/api/chat`, {
         history: history,
         chat: message,
       }, {

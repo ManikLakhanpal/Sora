@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes"
 import { Sun, Moon, SunMoon, User } from "lucide-react"
 import { useEffect, useState } from "react"
-import { useAuth } from "@/app/context/AuthContext"
+import { useAuth } from "@/context/AuthContext"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -45,7 +45,7 @@ function NavigationBar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem>
-                <Link href="/profile">Profile</Link>
+                <Link href="/signin">Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={logOut}>Sign Out</DropdownMenuItem>
             </DropdownMenuContent>
