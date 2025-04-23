@@ -3,7 +3,6 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/context/AuthContext.js";
 import React, { ReactNode } from "react";
 
-
 interface Props {
   children: ReactNode;
 }
